@@ -40,6 +40,10 @@ Parser.parse = content => {
           referrer: '',
           'user-agent': EXTINF.getAttribute('user-agent')
         },
+        drm: {
+          license_type: undefined,
+          license_key: undefined
+        },
         url: undefined,
         raw: line.raw,
         line: line.index + 1,
@@ -61,6 +65,12 @@ Parser.parse = content => {
       if (!items[i]) continue
       const EXTGRP = string
       items[i].group.title = EXTGRP.getValue() || items[i].group.title
+      items[i].raw += `\r\n${line.raw}`
+    } else if (string.startsWith('#KODIPROP:')) {
+      if (!items[i]) continue
+      const KODIPROP = string
+      items[i].drm.license_type = KODIPROP.getOption('inputstream.adaptive.license_type') || items[i].drm.license_type
+      items[i].drm.license_key = KODIPROP.getOption('inputstream.adaptive.license_key') || items[i].drm.license_key
       items[i].raw += `\r\n${line.raw}`
     } else {
       if (!items[i]) continue
