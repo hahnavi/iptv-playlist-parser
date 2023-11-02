@@ -12,7 +12,7 @@ Parser.parse = content => {
   let lines = content.split('\n').map(parseLine)
   let firstLine = lines.find(l => l.index === 0)
 
-  if (!firstLine || !/^#EXTM3U/.test(firstLine.raw)) throw new Error('Playlist is not valid')
+  if (!firstLine) throw new Error('Playlist is not valid')
 
   playlist.header = parseHeader(firstLine)
 
